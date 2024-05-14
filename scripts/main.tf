@@ -1,4 +1,4 @@
-resource "aws_instance" "test-server" {
+resource "aws_instance" "Financedeploy-server" {
   ami           = "ami-07caf09b362be10b8" 
   instance_type = "t2.micro" 
   key_name = "My-gitdevops"
@@ -16,7 +16,7 @@ resource "aws_instance" "test-server" {
     Name = "Financedeploy-server"
   }
   provisioner "local-exec" {
-        command = " echo ${aws_instance.test-server.public_ip} > inventory "
+        command = " echo ${aws_instance.Financedeploy.public_ip} > inventory "
   }
    provisioner "local-exec" {
   command = "ansible-playbook /var/lib/jenkins/workspace/Banking/scripts/finance-playbook.yml "
