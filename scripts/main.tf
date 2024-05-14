@@ -1,19 +1,19 @@
 resource "aws_instance" "test-server" {
   ami           = "ami-07caf09b362be10b8" 
   instance_type = "t2.micro" 
-  key_name = "learnawskey"
-  vpc_security_group_ids= ["sg-06e7a45a6786ad282"]
+  key_name = "My-gitdevops"
+  vpc_security_group_ids= ["sg-0e254c5d2f76c6398"]
   connection {
     type     = "ssh"
     user     = "ec2-user"
-    private_key = file("./learnawskey.pem")
+    private_key = file("./My-gitdevops.pem")
     host     = self.public_ip
   }
   provisioner "remote-exec" {
     inline = [ "echo 'wait to start instance' "]
   }
   tags = {
-    Name = "test-server"
+    Name = "Finance deploy-server"
   }
   provisioner "local-exec" {
         command = " echo ${aws_instance.test-server.public_ip} > inventory "
