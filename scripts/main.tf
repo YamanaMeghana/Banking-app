@@ -3,11 +3,16 @@ resource "aws_instance" "Financedeploy-server" {
   instance_type = "t2.micro" 
   key_name = "My-gitdevops"
   vpc_security_group_ids= ["sg-0e254c5d2f76c6398"]
+  tags = {
+    Name = "Financedeploy-server"
+  }
+}
+  resource "null_resource" "install_grafana" {
   connection {
-    type     = "ssh"
-    user     = "ec2-user"
+    type        = "ssh"
+    user        = "ec2-user"
     private_key = file("./My-gitdevops.pem")
-    host     = self.public_ip
+    host        = aws_instance.Financedeploy-server.public_ip
   }
   provisioner "remote-exec" {
 
@@ -22,9 +27,6 @@ resource "aws_instance" "Financedeploy-server" {
       "sudo apt-get install -y grafana",
       "sudo systemctl start grafana-server"
      ]
-  }
-  tags = {
-    Name = "Financedeploy-server"
   }
   provisioner "local-exec" {
         command = " echo ${aws_instance.Financedeploy-server.public_ip} > inventory "
