@@ -16,7 +16,7 @@ resource "aws_instance" "Financedeploy-server" {
     Name = "Financedeploy-server"
   }
   provisioner "local-exec" {
-        command = " echo ${aws_instance.Financedeploy.public_ip} > inventory "
+        command = " echo ${aws_instance.Financedeploy-server.public_ip} > inventory "
   }
    provisioner "local-exec" {
   command = "ansible-playbook /var/lib/jenkins/workspace/Banking/scripts/finance-playbook.yml "
