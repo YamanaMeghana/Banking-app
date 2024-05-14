@@ -8,7 +8,7 @@ pipeline {
     stage('Git checkout') {
       steps {
          echo 'This is for cloning the gitrepo'
-         git branch: 'main', url: 'https://github.com/challadevops1/Banking-Demo.git'
+         git branch: 'main', url: 'https://github.com/YamanaMeghana/Banking-app.git'
                           }
             }
     stage('Create a Package') {
