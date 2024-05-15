@@ -28,7 +28,7 @@ resource "aws_instance" "Financedeploy-server" {
        gpgcheck=1
        gpgkey=https://packages.grafana.com/gpg.key
        sslverify=1
-       EOF",
+       EOF
      "sudo yum update -y",
      "sudo yum install grafana -y",
      "sudo systemctl start grafana-server",
