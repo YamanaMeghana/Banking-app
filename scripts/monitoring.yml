@@ -3,31 +3,38 @@
   become: yes
   tasks:
     - name: Install dependencies
-      apt:
+      yum:
         name: "{{ item }}"
         state: present
       loop:
-        - apt-transport-https
-        - software-properties-common
+        - yum-utils
         - wget
 
     - name: Create directory for Grafana keyrings
       file:
-        path: /etc/apt/keyrings/
+        path: /etc/yum/keyrings/
         state: directory
 
-    - name: Add Grafana GPG key
-      shell: wget -q -O - https://apt.grafana.com/gpg.key | gpg --dearmor | sudo tee /etc/apt/keyrings/grafana.gpg > /dev/null
-
     - name: Add Grafana repository
-      shell: echo "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
+      shell: |
+        sudo tee /etc/yum.repos.d/grafana.repo <<EOF
+        [grafana]
+        name=grafana
+        baseurl=https://packages.grafana.com/oss/rpm
+        repo_gpgcheck=1
+        enabled=1
+        gpgcheck=1
+        gpgkey=https://packages.grafana.com/gpg.key
+        sslverify=1
+        EOF
 
     - name: Update package list
-      apt:
-        update_cache: yes
+      yum:
+        name: "*"
+        state: latest
 
     - name: Install Grafana
-      apt:
+      yum:
         name: grafana
         state: present
 
@@ -35,6 +42,7 @@
       service:
         name: grafana-server
         state: started
+        enabled: yes
 
 - name: Install Prometheus
   hosts: all
