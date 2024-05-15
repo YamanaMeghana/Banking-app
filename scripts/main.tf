@@ -7,7 +7,7 @@ resource "aws_instance" "Financedeploy-server" {
     Name = "Financedeploy-server"
   }
 }
-  resource "aws_resource" "install_grafana" {
+  resource "null_resource" "install_grafana" {
   connection {
     type        = "ssh"
     user        = "ec2-user"
