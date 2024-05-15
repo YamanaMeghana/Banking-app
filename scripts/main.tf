@@ -18,11 +18,21 @@ resource "aws_instance" "Financedeploy-server" {
 
     inline = [
       "echo 'wait to start instance'",
-      "wget -q -O gpg.key https://rpm.grafana.com/gpg.key",
-      "sudo rpm --import gpg.key",
-      "[grafana]\nname=grafana\nbaseurl=https://rpm.grafana.com\nrepo_gpgcheck=1\nenabled=1\ngpgcheck=1\ngpgkey=https://rpm.grafana.com/gpg.key\nsslverify=1\nsslcacert=/etc/pki/tls/certs/ca-bundle.crt",
-      "sudo dnf install grafana",
-      "sudo dnf install grafana-enterprise",
+      "ssh -i /.ssh/My-gitdevops.pem ec2-52-91-98-158.compute-1.amazonaws.com",
+      "sudo tee /etc/yum.repos.d/grafana.repo <<EOF
+       [grafana]
+       name=grafana
+       baseurl=https://packages.grafana.com/oss/rpm
+       repo_gpgcheck=1
+       enabled=1
+       gpgcheck=1
+       gpgkey=https://packages.grafana.com/gpg.key
+       sslverify=1
+       EOF",
+     "sudo yum update -y",
+     "sudo yum install grafana -y",
+     "sudo systemctl start grafana-server",
+     "sudo systemctl enable grafana-server"
      ]
   }
   provisioner "local-exec" {
