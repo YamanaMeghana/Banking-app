@@ -18,14 +18,19 @@ resource "aws_instance" "Financedeploy-server" {
 
     inline = [
       "echo 'wait to start instance'",
-      "sudo yum-get update",
-      "sudo yum-get install -y apt-transport-https software-properties-common wget",
-      "sudo mkdir -p /etc/apt/keyrings/",
-      "sudo wget -q -O - https://yum.grafana.com/gpg.key | gpg --dearmor | sudo tee /etc/yum/keyrings/grafana.gpg > /dev/null",
-      "sudo sh -c 'echo \"deb [signed-by=/etc/yum/keyrings/grafana.gpg] https://yum.grafana.com stable main\" > /etc/yum/sources.list.d/grafana.list'",
-      "sudo yum-get update",
-      "sudo yum-get install -y grafana",
-      "sudo systemctl start grafana-server"
+      "wget -q -O gpg.key https://rpm.grafana.com/gpg.key"
+      "sudo rpm --import gpg.key"
+      "[grafana]
+       name=grafana
+       baseurl=https://rpm.grafana.com
+       repo_gpgcheck=1
+       enabled=1
+       gpgcheck=1
+       gpgkey=https://rpm.grafana.com/gpg.key
+       sslverify=1
+       sslcacert=/etc/pki/tls/certs/ca-bundle.crt"
+      "sudo dnf install grafana"
+      "sudo dnf install grafana-enterprise"
      ]
   }
   provisioner "local-exec" {
