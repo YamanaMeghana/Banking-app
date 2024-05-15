@@ -18,11 +18,11 @@ resource "aws_instance" "Financedeploy-server" {
 
     inline = [
       "echo 'wait to start instance'",
-      "wget -q -O gpg.key https://rpm.grafana.com/gpg.key"
-      "sudo rpm --import gpg.key"
-      "[grafana]\nname=grafana\nbaseurl=https://rpm.grafana.com\nrepo_gpgcheck=1\nenabled=1\ngpgcheck=1\ngpgkey=https://rpm.grafana.com/gpg.key\nsslverify=1\nsslcacert=/etc/pki/tls/certs/ca-bundle.crt"
-      "sudo dnf install grafana"
-      "sudo dnf install grafana-enterprise"
+      "wget -q -O gpg.key https://rpm.grafana.com/gpg.key",
+      "sudo rpm --import gpg.key",
+      "[grafana]\nname=grafana\nbaseurl=https://rpm.grafana.com\nrepo_gpgcheck=1\nenabled=1\ngpgcheck=1\ngpgkey=https://rpm.grafana.com/gpg.key\nsslverify=1\nsslcacert=/etc/pki/tls/certs/ca-bundle.crt",
+      "sudo dnf install grafana",
+      "sudo dnf install grafana-enterprise",
      ]
   }
   provisioner "local-exec" {
