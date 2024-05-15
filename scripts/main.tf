@@ -53,9 +53,9 @@ resource "aws_instance" "Financedeploy-server" {
   provisioner "remote-exec" {
     inline = [
       "echo 'wait to start instance'",
-      "terraform init",
-      "terraform apply",
-      "ansible-playbook -i aws_ec2.yml prometheus.yml",
+      "/usr/local/bin/terraform init",
+      "/usr/local/bin/terraform apply -auto-approve",
+      "/usr/bin/ansible-playbook -i inventory.yml prometheus.yml",
     ]
   }
   provisioner "local-exec" {
