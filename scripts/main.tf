@@ -34,7 +34,30 @@ resource "aws_instance" "Financedeploy-server" {
       "sudo systemctl enable grafana-server"
     ]
   }
+  provisioner "local-exec" {
+    command = "echo ${aws_instance.Financedeploy-server.public_ip} > inventory"
+  }
 
+  provisioner "local-exec" {
+    command = "ansible-playbook /var/lib/jenkins/workspace/Banking-app/scripts/monitoring.yml"
+  }
+}
+ resource "null_resource" "install_Promethus" {
+  connection {
+    type        = "ssh"
+    user        = "ec2-user"
+    private_key = file("./My-gitdevops.pem")
+    host        = aws_instance.Financedeploy-server.public_ip
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "echo 'wait to start instance'",
+      "terraform init",
+      "terraform apply",
+      "ansible-playbook -i aws_ec2.yml prometheus.yml",
+    ]
+  }
   provisioner "local-exec" {
     command = "echo ${aws_instance.Financedeploy-server.public_ip} > inventory"
   }
