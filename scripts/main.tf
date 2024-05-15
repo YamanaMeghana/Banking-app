@@ -7,7 +7,7 @@ resource "aws_instance" "Financedeploy-server" {
     Name = "Financedeploy-server"
   }
 }
-  resource "null_resource" "install_grafana" {
+  resource "aws_resource" "install_grafana" {
   connection {
     type        = "ssh"
     user        = "ec2-user"
@@ -18,13 +18,13 @@ resource "aws_instance" "Financedeploy-server" {
 
     inline = [
       "echo 'wait to start instance'",
-      "sudo apt-get update",
-      "sudo apt-get install -y apt-transport-https software-properties-common wget",
+      "sudo yum-get update",
+      "sudo yum-get install -y apt-transport-https software-properties-common wget",
       "sudo mkdir -p /etc/apt/keyrings/",
-      "sudo wget -q -O - https://apt.grafana.com/gpg.key | gpg --dearmor | sudo tee /etc/apt/keyrings/grafana.gpg > /dev/null",
-      "sudo sh -c 'echo \"deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main\" > /etc/apt/sources.list.d/grafana.list'",
-      "sudo apt-get update",
-      "sudo apt-get install -y grafana",
+      "sudo wget -q -O - https://yum.grafana.com/gpg.key | gpg --dearmor | sudo tee /etc/yum/keyrings/grafana.gpg > /dev/null",
+      "sudo sh -c 'echo \"deb [signed-by=/etc/yum/keyrings/grafana.gpg] https://yum.grafana.com stable main\" > /etc/yum/sources.list.d/grafana.list'",
+      "sudo yum-get update",
+      "sudo yum-get install -y grafana",
       "sudo systemctl start grafana-server"
      ]
   }
